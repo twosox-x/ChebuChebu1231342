@@ -22,6 +22,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <I18nProvider>
+          {/* Grain/paper texture overlay — pointer-events: none so it never blocks clicks */}
+          <div className="grain-overlay" aria-hidden="true" />
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
             <Router />
           </WouterRouter>

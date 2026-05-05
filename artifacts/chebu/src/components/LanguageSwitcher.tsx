@@ -5,27 +5,22 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
   const { language, setLanguage } = useI18n();
 
   return (
-    <div className={cn("flex items-center gap-2 font-mono text-sm font-bold", className)}>
-      <button 
-        onClick={() => setLanguage("en")}
-        className={cn("hover:text-primary transition-colors", language === "en" && "text-primary underline decoration-2 underline-offset-4")}
-      >
-        EN
-      </button>
-      <span className="text-muted-foreground/30">|</span>
-      <button 
-        onClick={() => setLanguage("ru")}
-        className={cn("hover:text-primary transition-colors", language === "ru" && "text-primary underline decoration-2 underline-offset-4")}
-      >
-        RU
-      </button>
-      <span className="text-muted-foreground/30">|</span>
-      <button 
-        onClick={() => setLanguage("zh")}
-        className={cn("hover:text-primary transition-colors", language === "zh" && "text-primary underline decoration-2 underline-offset-4")}
-      >
-        中文
-      </button>
+    <div className={cn("flex items-center border-[2px] border-primary overflow-hidden font-mono text-xs tracking-widest", className)}>
+      {(["en", "ru", "zh"] as const).map((lang, i) => (
+        <button
+          key={lang}
+          onClick={() => setLanguage(lang)}
+          data-testid={`lang-${lang}`}
+          className={cn(
+            "px-3 py-1.5 uppercase transition-colors border-r-[2px] border-primary last:border-r-0",
+            language === lang
+              ? "bg-primary text-primary-foreground font-bold"
+              : "bg-background text-foreground hover:bg-primary/20"
+          )}
+        >
+          {lang === "en" ? "EN" : lang === "ru" ? "RU" : "中文"}
+        </button>
+      ))}
     </div>
   );
 }

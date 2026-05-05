@@ -1,7 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Russo+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
+
+@font-face {
+  font-family: 'Konstruktor';
+  src: url('/fonts/Konstruktor.ttf') format('truetype'),
+       url('/fonts/Konstruktor.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -18,10 +27,10 @@
 
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-  
+
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
-  
+
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
 
@@ -32,9 +41,9 @@
   --color-destructive-foreground: hsl(var(--destructive-foreground));
 
   --font-sans: 'IBM Plex Mono', monospace;
-  --font-serif: 'Russo One', sans-serif;
+  --font-serif: 'Konstruktor', 'Russo One', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
-  --font-display: 'Russo One', sans-serif;
+  --font-display: 'Konstruktor', sans-serif;
 
   --radius-sm: 0px;
   --radius-md: 0px;
@@ -43,69 +52,25 @@
 }
 
 :root {
-  /* Cream */
   --background: 39 74% 80%;
-  /* Black */
   --foreground: 24 28% 7%;
-  
-  /* Black */
   --border: 24 28% 7%;
-  /* Cream */
   --card: 39 74% 80%;
   --card-foreground: 24 28% 7%;
   --card-border: 24 28% 7%;
-
-  /* Deep Red */
   --primary: 352 81% 38%;
   --primary-foreground: 39 74% 80%;
-
-  /* Gold */
   --secondary: 42 66% 53%;
   --secondary-foreground: 24 28% 7%;
-
-  /* Black */
   --muted: 24 28% 7%;
   --muted-foreground: 39 74% 80%;
-
   --accent: 42 66% 53%;
   --accent-foreground: 24 28% 7%;
-
   --destructive: 352 81% 38%;
   --destructive-foreground: 39 74% 80%;
-
   --input: 24 28% 7%;
   --ring: 352 81% 38%;
-
   --radius: 0px;
-}
-
-.dark {
-  --background: 24 28% 7%;
-  --foreground: 39 74% 80%;
-  
-  --border: 39 74% 80%;
-  
-  --card: 24 28% 7%;
-  --card-foreground: 39 74% 80%;
-  --card-border: 39 74% 80%;
-
-  --primary: 352 81% 38%;
-  --primary-foreground: 39 74% 80%;
-
-  --secondary: 42 66% 53%;
-  --secondary-foreground: 24 28% 7%;
-
-  --muted: 39 74% 80%;
-  --muted-foreground: 24 28% 7%;
-
-  --accent: 42 66% 53%;
-  --accent-foreground: 24 28% 7%;
-
-  --destructive: 352 81% 38%;
-  --destructive-foreground: 39 74% 80%;
-
-  --input: 39 74% 80%;
-  --ring: 352 81% 38%;
 }
 
 @layer base {
@@ -116,28 +81,71 @@
   body {
     @apply font-mono antialiased bg-background text-foreground;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-wide;
+    font-family: 'Konstruktor', 'Russo One', sans-serif;
+    letter-spacing: 0.05em;
   }
 }
 
-/* CRT Noise Overlay */
-body::after {
-  content: "";
+/* For Chinese, override heading font to system CJK fonts */
+html[data-lang="zh"] h1,
+html[data-lang="zh"] h2,
+html[data-lang="zh"] h3,
+html[data-lang="zh"] h4,
+html[data-lang="zh"] h5,
+html[data-lang="zh"] h6 {
+  font-family: 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
+  letter-spacing: 0.1em;
+}
+
+/* ─── Grain overlay: paper texture, pointer-events disabled ─── */
+.grain-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
-  pointer-events: none;
-  z-index: 9999;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.05;
+  pointer-events: none !important;
+  z-index: 9998;
+  opacity: 0.55;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
   mix-blend-mode: multiply;
 }
 
-.dark body::after {
-  opacity: 0.07;
-  mix-blend-mode: overlay;
+/* ─── Soviet diagonal stripe utility ─── */
+.soviet-stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 8px,
+    rgba(177, 18, 38, 0.12) 8px,
+    rgba(177, 18, 38, 0.12) 10px
+  );
+}
+
+/* ─── Section banner title style ─── */
+.section-banner {
+  display: inline-block;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 0.25em 0.75em;
+  transform: skewX(-2deg);
+  box-shadow: 6px 6px 0 hsl(var(--foreground));
+}
+
+/* ─── Marquee animation ─── */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 22s linear infinite;
+  white-space: nowrap;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
 }

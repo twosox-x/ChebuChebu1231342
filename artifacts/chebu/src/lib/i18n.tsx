@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 type Language = "en" | "ru" | "zh";
 
@@ -212,6 +212,10 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-lang", language);
+  }, [language]);
 
   return (
     <I18nContext.Provider value={{ language, setLanguage, t: translations[language] }}>

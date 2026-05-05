@@ -1,60 +1,89 @@
 import { useI18n } from "@/lib/i18n";
 import IllustrationPlaceholder from "./IllustrationPlaceholder";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   const { t } = useI18n();
 
   return (
-    <section className="relative min-h-screen pt-24 pb-16 flex flex-col justify-between overflow-hidden border-b-4 border-primary bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-background via-background to-background/50">
-      <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center grow">
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
+    <section className="relative min-h-screen pt-14 flex flex-col overflow-hidden bg-background">
+
+      {/* Main content */}
+      <div className="flex-1 container mx-auto px-4 grid lg:grid-cols-2 gap-8 items-center py-12">
+
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="flex flex-col gap-6"
         >
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-primary leading-[0.9] uppercase drop-shadow-[4px_4px_0_var(--color-foreground)]">
-            {t.hero.headline}
+          {/* Overline badge */}
+          <div className="inline-flex items-center gap-2 self-start bg-primary text-primary-foreground px-3 py-1 font-mono text-xs tracking-[0.3em] uppercase border-2 border-foreground shadow-[3px_3px_0_0_#17110D]">
+            ★ TON BLOCKCHAIN ★
+          </div>
+
+          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif text-foreground uppercase leading-[0.88] tracking-tight">
+            <span className="block text-primary drop-shadow-[4px_4px_0_#17110D]">{t.hero.headline.split(" ").slice(0,2).join(" ")}</span>
+            <span className="block drop-shadow-[3px_3px_0_hsl(352_81%_38%_/_0.4)]">{t.hero.headline.split(" ").slice(2).join(" ")}</span>
           </h1>
-          <p className="text-xl md:text-2xl font-mono font-bold max-w-xl">
+
+          <p className="text-base md:text-lg font-mono font-bold max-w-md border-l-[6px] border-primary pl-4 py-1 leading-relaxed">
             {t.hero.subtext}
           </p>
-          <div className="flex flex-wrap gap-4 mt-4">
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-secondary hover:text-secondary-foreground text-lg uppercase font-bold tracking-widest border-2 border-transparent hover:border-foreground transition-all rounded-none shadow-[4px_4px_0_0_var(--color-foreground)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]">
+
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 mt-2">
+            <a
+              href="#"
+              data-testid="btn-buy"
+              className="inline-flex items-center justify-center bg-primary text-primary-foreground font-serif text-base uppercase tracking-[0.15em] px-6 py-3 border-[3px] border-foreground shadow-[5px_5px_0_0_#17110D] hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all"
+            >
               {t.hero.btnBuy}
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg uppercase font-bold tracking-widest border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all rounded-none shadow-[4px_4px_0_0_var(--color-primary)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]">
+            </a>
+            <a
+              href="#"
+              data-testid="btn-telegram"
+              className="inline-flex items-center justify-center bg-background text-foreground font-serif text-base uppercase tracking-[0.15em] px-6 py-3 border-[3px] border-foreground shadow-[5px_5px_0_0_hsl(352_81%_38%)] hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all"
+            >
               {t.hero.btnTelegram}
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg uppercase font-bold tracking-widest border-2 border-foreground text-foreground hover:bg-foreground hover:text-background transition-all rounded-none">
+            </a>
+            <a
+              href="#manifesto"
+              data-testid="btn-manifesto"
+              className="inline-flex items-center justify-center bg-secondary text-secondary-foreground font-serif text-base uppercase tracking-[0.15em] px-6 py-3 border-[3px] border-foreground shadow-[5px_5px_0_0_#17110D] hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all"
+            >
               {t.hero.btnManifesto}
-            </Button>
+            </a>
           </div>
         </motion.div>
-        
+
+        {/* Illustration */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative z-10"
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="relative flex justify-center"
         >
-          <div className="absolute inset-0 bg-secondary translate-x-4 translate-y-4 -z-10 border-2 border-foreground"></div>
-          <IllustrationPlaceholder label="HERO MASCOT (MONOCHROME)" aspectRatio="3/4" className="w-full max-w-md mx-auto bg-background border-4 border-foreground" />
+          {/* Soviet star decoration */}
+          <div className="absolute -top-4 -right-4 text-6xl text-secondary font-serif z-10 select-none leading-none drop-shadow-[2px_2px_0_#17110D]">★</div>
+          <div className="absolute -bottom-4 -left-4 text-4xl text-primary font-serif z-10 select-none leading-none">★</div>
+          <div className="relative">
+            <div className="absolute inset-0 bg-secondary translate-x-[8px] translate-y-[8px] -z-10 border-[3px] border-foreground"></div>
+            <IllustrationPlaceholder
+              label="HERO MASCOT (MONOCHROME)"
+              aspectRatio="3/4"
+              className="w-full max-w-sm mx-auto bg-background border-[4px] border-foreground"
+            />
+          </div>
         </motion.div>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden bg-primary text-primary-foreground border-t-4 border-foreground py-3 flex">
-        <motion.div 
-          animate={{ x: [0, -1000] }}
-          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-          className="whitespace-nowrap flex font-serif text-2xl tracking-widest"
-        >
-          {Array.from({ length: 10 }).map((_, i) => (
-            <span key={i} className="mx-4">{t.hero.ticker}</span>
+      {/* Animated ticker */}
+      <div className="w-full overflow-hidden bg-primary border-y-[4px] border-foreground py-3 flex">
+        <div className="marquee-track flex font-serif text-primary-foreground text-xl tracking-[0.15em] uppercase select-none">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <span key={i} className="mx-6 shrink-0">{t.hero.ticker}</span>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

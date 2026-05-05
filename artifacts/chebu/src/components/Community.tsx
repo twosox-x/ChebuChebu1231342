@@ -1,57 +1,77 @@
 import { useI18n } from "@/lib/i18n";
 import IllustrationPlaceholder from "./IllustrationPlaceholder";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { SiTelegram, SiX } from "react-icons/si";
 import { LineChart, ExternalLink } from "lucide-react";
 
 export default function Community() {
   const { t } = useI18n();
 
+  const links = [
+    { icon: <SiTelegram className="w-5 h-5" />, label: t.community.telegram, href: "#", style: "bg-foreground text-background hover:bg-primary hover:text-primary-foreground hover:border-primary border-foreground" },
+    { icon: <SiX className="w-5 h-5" />, label: t.community.twitter, href: "#", style: "bg-background text-foreground hover:bg-foreground hover:text-background border-foreground" },
+    { icon: <LineChart className="w-5 h-5" />, label: t.community.dexScreener, href: "#", style: "bg-secondary text-secondary-foreground hover:bg-foreground hover:text-background border-foreground" },
+    { icon: <ExternalLink className="w-5 h-5" />, label: t.community.tonviewer, href: "#", style: "bg-primary text-primary-foreground hover:bg-secondary hover:text-secondary-foreground border-foreground" },
+  ];
+
   return (
-    <section className="py-24 border-b-4 border-primary bg-background" id="community">
-      <div className="container mx-auto px-4">
+    <section className="border-b-[6px] border-foreground bg-background" id="community">
+      {/* Section title banner */}
+      <div className="bg-secondary py-8 px-4 border-b-[4px] border-foreground">
+        <div className="container mx-auto flex items-center gap-4">
+          <span className="text-foreground text-4xl font-serif leading-none">★</span>
+          <motion.h2
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="text-2xl md:text-4xl font-serif text-foreground uppercase tracking-widest drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)]"
+          >
+            {t.community.title}
+          </motion.h2>
+          <span className="text-foreground text-4xl font-serif leading-none ml-auto">★</span>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-16">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <motion.div 
+          {/* Left: copy + buttons */}
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-serif text-primary mb-6 uppercase drop-shadow-[2px_2px_0_var(--color-foreground)]">
-              {t.community.title}
-            </h2>
-            <p className="font-mono text-xl font-bold mb-10 border-l-4 border-secondary pl-4 py-1 text-foreground">
-              {t.community.copy}
+            <p className="font-mono text-xl md:text-2xl font-bold mb-10 border-l-[6px] border-primary pl-5 py-1 leading-relaxed">
+              "{t.community.copy}"
             </p>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="h-16 border-4 border-foreground rounded-none font-bold text-lg hover:bg-primary hover:text-primary-foreground hover:border-primary uppercase flex gap-3 group shadow-[4px_4px_0_0_var(--color-foreground)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
-                <SiTelegram className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                {t.community.telegram}
-              </Button>
-              <Button variant="outline" className="h-16 border-4 border-foreground rounded-none font-bold text-lg hover:bg-foreground hover:text-background uppercase flex gap-3 group shadow-[4px_4px_0_0_var(--color-foreground)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
-                <SiX className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                {t.community.twitter}
-              </Button>
-              <Button variant="outline" className="h-16 border-4 border-foreground rounded-none font-bold text-lg hover:bg-secondary hover:text-secondary-foreground hover:border-secondary uppercase flex gap-3 group shadow-[4px_4px_0_0_var(--color-foreground)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
-                <LineChart className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                {t.community.dexScreener}
-              </Button>
-              <Button variant="outline" className="h-16 border-4 border-foreground rounded-none font-bold text-lg hover:bg-primary hover:text-primary-foreground hover:border-primary uppercase flex gap-3 group shadow-[4px_4px_0_0_var(--color-foreground)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all">
-                <ExternalLink className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                {t.community.tonviewer}
-              </Button>
+
+            <div className="grid grid-cols-2 gap-0 border-[4px] border-foreground">
+              {links.map((link, i) => (
+                <a
+                  key={i}
+                  href={link.href}
+                  data-testid={`btn-community-${i}`}
+                  className={`flex items-center justify-center gap-3 px-4 py-5 border-r-[3px] border-b-[3px] border-foreground font-serif text-base uppercase tracking-widest transition-all hover:translate-x-[3px] hover:translate-y-[3px] ${link.style}`}
+                >
+                  {link.icon}
+                  {link.label}
+                </a>
+              ))}
             </div>
           </motion.div>
 
-          <motion.div 
+          {/* Right: illustration */}
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="absolute inset-0 bg-primary translate-x-4 translate-y-4 -z-10 border-2 border-foreground"></div>
-            <IllustrationPlaceholder label="COMMUNITY POSTER" aspectRatio="3/4" className="bg-background border-4 border-foreground" />
+            <div className="absolute inset-0 bg-primary translate-x-[6px] translate-y-[6px] -z-10 border-[3px] border-foreground"></div>
+            <IllustrationPlaceholder
+              label="COMMUNITY POSTER"
+              aspectRatio="3/4"
+              className="bg-background border-[4px] border-foreground"
+            />
           </motion.div>
         </div>
       </div>

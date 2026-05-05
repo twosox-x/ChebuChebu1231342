@@ -1,6 +1,5 @@
 import { useI18n } from "@/lib/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { Button } from "@/components/ui/button";
 import { Copy, Check } from "lucide-react";
 import { useState } from "react";
 
@@ -16,41 +15,60 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-foreground text-background py-12 border-t-8 border-primary">
-      <div className="container mx-auto px-4 flex flex-col items-center text-center gap-8">
-        
-        <div className="font-serif text-4xl md:text-6xl text-primary tracking-widest uppercase mb-4 drop-shadow-[2px_2px_0_var(--color-background)]">
-          $CHEBU
-        </div>
+    <footer className="bg-foreground text-background border-t-[8px] border-primary">
 
-        <div className="bg-background text-foreground p-4 border-4 border-primary flex flex-col md:flex-row items-center gap-4 max-w-2xl w-full mx-auto">
-          <span className="font-mono font-bold whitespace-nowrap hidden md:inline">CA:</span>
-          <code className="font-mono text-sm md:text-base truncate flex-1 font-bold bg-primary/10 px-2 py-1 w-full text-center md:text-left">{ca}</code>
-          <Button 
+      {/* Top banner */}
+      <div className="bg-primary border-b-[4px] border-foreground py-6 px-4">
+        <div className="container mx-auto flex items-center justify-center gap-6">
+          <span className="text-secondary text-4xl font-serif leading-none select-none">★</span>
+          <span className="font-serif text-4xl md:text-6xl text-primary-foreground tracking-[0.2em] uppercase drop-shadow-[3px_3px_0_#17110D]">$CHEBU</span>
+          <span className="text-secondary text-4xl font-serif leading-none select-none">★</span>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-12 flex flex-col items-center gap-10 text-center">
+
+        {/* CA block */}
+        <div className="bg-background text-foreground border-[4px] border-primary shadow-[6px_6px_0_0_hsl(352_81%_38%)] flex flex-col md:flex-row items-stretch max-w-2xl w-full">
+          <div className="bg-primary text-primary-foreground font-serif uppercase tracking-widest px-5 flex items-center justify-center text-sm border-r-[3px] border-primary md:border-foreground">
+            CA
+          </div>
+          <code className="font-mono text-sm font-bold flex-1 px-4 py-4 truncate text-center md:text-left">
+            {ca}
+          </code>
+          <button
             onClick={handleCopy}
-            variant="outline" 
-            className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-none uppercase font-bold w-full md:w-auto"
+            data-testid="btn-copy-ca"
+            className="flex items-center justify-center gap-2 bg-foreground text-background hover:bg-primary hover:text-primary-foreground border-t-[3px] md:border-t-0 md:border-l-[3px] border-foreground px-5 py-4 font-serif uppercase tracking-widest text-sm transition-colors"
           >
-            {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             {copied ? t.footer.caCopied : "COPY CA"}
-          </Button>
+          </button>
         </div>
 
-        <div className="w-full h-1 bg-background/20 my-4 max-w-md mx-auto"></div>
+        {/* Divider */}
+        <div className="flex items-center gap-4 w-full max-w-3xl">
+          <div className="flex-1 h-[2px] bg-background/20"></div>
+          <span className="text-primary text-xl font-serif">★ ★ ★</span>
+          <div className="flex-1 h-[2px] bg-background/20"></div>
+        </div>
 
+        {/* Nav + language */}
         <div className="flex flex-col md:flex-row gap-6 items-center justify-between w-full max-w-4xl">
-          <nav className="flex gap-6 font-mono text-sm font-bold uppercase">
-             <a href="#manifesto" className="hover:text-primary transition-colors">Manifesto</a>
-             <a href="#culture" className="hover:text-primary transition-colors">Culture</a>
-             <a href="#roadmap" className="hover:text-primary transition-colors">Roadmap</a>
-             <a href="#how-to-buy" className="hover:text-primary transition-colors">How to Buy</a>
+          <nav className="flex flex-wrap gap-6 font-mono text-xs tracking-[0.2em] uppercase text-background/70">
+            <a href="#manifesto" className="hover:text-primary transition-colors">Manifesto</a>
+            <a href="#culture" className="hover:text-primary transition-colors">Culture</a>
+            <a href="#roadmap" className="hover:text-primary transition-colors">Roadmap</a>
+            <a href="#how-to-buy" className="hover:text-primary transition-colors">How to Buy</a>
+            <a href="#community" className="hover:text-primary transition-colors">Community</a>
           </nav>
-
-          <LanguageSwitcher className="text-background filter invert grayscale" />
+          <LanguageSwitcher />
         </div>
-        
-        <p className="font-mono text-xs opacity-50 mt-8">
-          © {new Date().getFullYear()} The People's Meme. All rights reserved. Not financial advice.
+
+        {/* Disclaimer */}
+        <p className="font-mono text-xs opacity-40 max-w-lg leading-relaxed">
+          © {new Date().getFullYear()} The People's Meme. All rights reserved.<br />
+          Not financial advice. Not a product. Just a meme you choose to believe in.
         </p>
       </div>
     </footer>
