@@ -1,0 +1,308 @@
+Build a modern, production-ready meme coin landing website called "$CHEBU" (TON-based memecoin inspired by Soviet propaganda aesthetics and a parody cute creature mascot).
+
+IMPORTANT:
+
+* This is a PURE MEME PROJECT
+
+* NO TOKENOMICS SECTION
+
+* NO FAKE UTILITY
+
+* The site must sell CULTURE, IDENTITY, and COMMUNITY
+
+* The site must look PREMIUM, not like a template
+
+* All assets must be easily replaceable
+
+* DO NOT use final artwork
+
+* Use placeholder blocks where illustrations will go
+
+* Code must be clean and modular
+
+---
+
+CRITICAL DESIGN REQUIREMENT (VERY IMPORTANT):
+
+This project will later use CUSTOM MONOCHROME HAND-DRAWN ILLUSTRATIONS (black ink / Soviet poster style)
+
+Because of this:
+
+* DO NOT generate or embed detailed images
+* Instead, create clearly marked placeholder containers
+
+For EVERY place where an illustration should exist:
+
+* Use a styled placeholder block
+* Include visible label:
+  "MONOCHROME ILLUSTRATION PLACEHOLDER"
+* Add code comments explaining usage
+
+Example:
+{/* Illustration: Hero mascot - monochrome ink drawing */}
+
+Placeholders must:
+
+* Use dashed borders
+* Have subtle paper texture
+* Maintain correct aspect ratios
+* Be responsive
+
+---
+
+STACK:
+
+* Next.js (App Router)
+* TypeScript
+* Tailwind CSS
+* Framer Motion
+* Static-first (no backend)
+
+---
+
+GLOBAL DESIGN STYLE:
+
+Theme: Soviet propaganda + modern crypto UI
+Mood: bold, graphic, poster-like, slightly absurd
+
+Color palette:
+
+* Deep red (#B11226)
+* Cream (#F2D8A7)
+* Gold (#D6A536)
+* Black (#17110D)
+
+Typography:
+
+* Headlines: Russo One / Stalinist-style font
+* Body: IBM Plex Mono / Inter
+* Buttons: uppercase
+
+Effects:
+
+* Grain overlays
+* Paper texture
+* Strong contrast blocks
+* Poster composition
+
+---
+
+MULTI-LANGUAGE SYSTEM:
+
+Implement i18n:
+
+* English (default)
+* Russian
+* Chinese
+
+Top-right switcher:
+EN | RU | 中文
+
+All text stored in translation JSON
+
+---
+
+SITE STRUCTURE:
+
+1. HERO SECTION
+
+Headline:
+"THE PEOPLE’S MEME HAS ARRIVED"
+
+Subtext:
+"Born in mystery. Raised by comrades. Deployed on TON."
+
+Buttons:
+[BUY $CHEBU]
+[JOIN TELEGRAM]
+[READ MANIFESTO]
+
+Main illustration placeholder:
+"HERO MASCOT (MONOCHROME)"
+
+{/* Replace with main mascot ink drawing */}
+
+Add animated ticker:
+"HODL FOR THE MOTHERLAND"
+
+---
+
+2. MANIFESTO SECTION
+
+Title:
+"THE CHEBU MANIFESTO"
+
+Text tone:
+Short, ideological parody (funny, absurd, confident)
+
+Example ideas:
+
+* Memes belong to the people
+* No insiders, only comrades
+* The chart is a collective effort
+
+Add side illustration placeholder:
+"PROPAGANDA ILLUSTRATION"
+
+Add slogan cards:
+
+* "No masters. Only memes."
+* "Every comrade deserves a bag."
+* "The revolution will be posted in Telegram."
+* "One meme. One people. One chart."
+
+---
+
+3. CULTURE SECTION (REPLACES TOKENOMICS)
+
+Title:
+"THE CULTURE"
+
+This is critical.
+
+Explain what $CHEBU is:
+
+* Not utility
+* Not roadmap-driven
+* It is:
+
+  * a vibe
+  * a shared joke
+  * a collective movement
+
+Content blocks:
+
+* "This is not a product"
+* "This is not an investment"
+* "This is a meme you choose to believe in"
+
+Add illustration placeholder:
+"CULTURE POSTER"
+
+---
+
+4. ROADMAP (FIVE-YEAR PLAN — IRONIC)
+
+Title:
+"THE FIVE-YEAR PLAN"
+
+Important: Make it intentionally unserious / meme
+
+Phases:
+
+Phase I — The Toy Awakens
+Phase II — The People Assemble
+Phase III — Infinite Posting
+Phase IV — Global Chebu Expansion
+Phase V — The Chart Goes Up
+
+---
+
+5. HOW TO BUY
+
+Title:
+"HOW TO JOIN THE UNION"
+
+Steps:
+
+1. Install Tonkeeper
+2. Buy TON
+3. Swap for $CHEBU
+4. Hold
+5. Post memes
+
+Add icon placeholders for each step
+
+CTA:
+"BUY ON TON"
+
+---
+
+6. PROPAGANDA WALL
+
+Grid of bold text posters
+
+Examples:
+
+* "BUY THE DIP, COMRADE"
+* "HODL FOR THE MOTHERLAND"
+* "REPORT BEARISH THOUGHTS"
+* "THE CHART MUST GO UP"
+
+Optional small illustration placeholders:
+"SMALL PROPAGANDA SKETCH"
+
+---
+
+7. COMMUNITY SECTION
+
+Title:
+"JOIN THE PROPAGANDA DEPARTMENT"
+
+Buttons:
+Telegram / Twitter / DexScreener / Tonviewer
+
+Text:
+"Every meme is ammunition. Every repost is service."
+
+Add illustration placeholder:
+"COMMUNITY POSTER"
+
+---
+
+8. FOOTER
+
+* Contract Address + Copy CA button
+* Links
+* Language switcher
+
+---
+
+ANIMATIONS:
+
+* Smooth scroll
+* Fade-in on reveal
+* Button hover glow
+* Subtle parallax
+
+---
+
+COMPONENT STRUCTURE:
+
+/components
+
+* Hero.tsx
+* Manifesto.tsx
+* Culture.tsx
+* Roadmap.tsx
+* HowToBuy.tsx
+* PropagandaWall.tsx
+* Community.tsx
+* LanguageSwitcher.tsx
+* IllustrationPlaceholder.tsx
+
+---
+
+EXTRA REQUIREMENTS:
+
+* Mobile-first
+* Clean layout
+* No lorem ipsum
+* Centralized illustration config
+* Easy to replace all visuals
+
+---
+
+DELIVERABLE:
+
+* Fully working site
+* Clean structure
+* Ready for Vercel
+
+---
+
+GOAL:
+
+A high-quality, viral-ready meme coin website that feels like a CULT MOVEMENT, not a product.
+
+DO NOT add tokenomics or fake utility.
