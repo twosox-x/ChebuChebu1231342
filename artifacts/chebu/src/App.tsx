@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import { I18nProvider } from "@/lib/i18n";
+import FilmGrain from "@/components/FilmGrain";
 
 const queryClient = new QueryClient();
 
@@ -22,8 +23,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <I18nProvider>
-          {/* Grain/paper texture overlay — pointer-events: none so it never blocks clicks */}
-          <div className="grain-overlay" aria-hidden="true" />
+          {/* Animated film grain — canvas-based, pointer-events: none */}
+          <FilmGrain />
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
             <Router />
           </WouterRouter>
