@@ -1,6 +1,7 @@
 import { useI18n } from "@/lib/i18n";
-import IllustrationPlaceholder from "./IllustrationPlaceholder";
 import { motion } from "framer-motion";
+import gwagonImg from "@assets/GWAGON.png";
+import { Link } from "wouter";
 
 export default function Hero() {
   const { t } = useI18n();
@@ -39,6 +40,13 @@ export default function Hero() {
             >
               {t.hero.btnBuy}
             </a>
+            <Link
+              href="/SOLtoTON"
+              className="inline-flex items-center justify-center bg-foreground text-background font-serif text-base uppercase tracking-[0.15em] px-6 py-3 border-[3px] border-foreground shadow-[5px_5px_0_0_hsl(352_81%_38%)] hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all"
+              data-testid="btn-buy-sol"
+            >
+              {t.hero.btnBuySol}
+            </Link>
             <a
               href="#"
               data-testid="btn-telegram"
@@ -67,12 +75,13 @@ export default function Hero() {
           <div className="absolute -top-4 -right-4 text-6xl text-secondary font-serif z-10 select-none leading-none drop-shadow-[2px_2px_0_#17110D]">★</div>
           <div className="absolute -bottom-4 -left-4 text-4xl text-primary font-serif z-10 select-none leading-none">★</div>
           <div className="relative">
-            <div className="absolute inset-0 bg-secondary translate-x-[8px] translate-y-[8px] -z-10 border-[3px] border-foreground"></div>
-            <IllustrationPlaceholder
-              label="HERO MASCOT (MONOCHROME)"
-              aspectRatio="3/4"
-              className="w-full max-w-sm mx-auto bg-background border-[4px] border-foreground"
-            />
+            <div className="w-full max-w-2xl mx-auto overflow-hidden">
+              <img 
+                src={gwagonImg} 
+                alt="G-Wagon" 
+                className="w-full h-auto object-contain"
+              />
+            </div>
           </div>
         </motion.div>
       </div>

@@ -4,6 +4,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
+import Support from "@/pages/Support";
+import SOLtoTON from "@/pages/SOLtoTON";
 import { I18nProvider } from "@/lib/i18n";
 import FilmGrain from "@/components/FilmGrain";
 
@@ -13,6 +15,8 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/support" component={Support} />
+      <Route path="/SOLtoTON" component={SOLtoTON} />
       <Route component={NotFound} />
     </Switch>
   );

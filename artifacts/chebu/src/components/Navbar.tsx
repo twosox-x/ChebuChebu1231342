@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useI18n } from "@/lib/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Link } from "wouter";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Volume2, VolumeX } from "lucide-react";
+import sovietAnthemAudio from "@assets/National Anthem of USSR.mp3";
+import logoSvg from "@assets/LOGO.svg";
 
 const NAV_LINKS = [
   { href: "#manifesto", labelKey: "manifesto" },
@@ -24,6 +26,9 @@ export default function Navbar() {
   const { language } = useI18n();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [audioStarted, setAudioStarted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -39,6 +44,47 @@ export default function Navbar() {
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
+
+  // Auto-play audio on first user interaction
+  useEffect(() => {
+    const startAudio = () => {
+      if (audioRef.current && !audioStarted) {
+        audioRef.current.play().catch(err => {
+          console.log("Auto-play prevented:", err);
+        });
+        setAudioStarted(true);
+      }
+    };
+
+    // Try to play immediately
+    startAudio();
+
+    // Also try on first click/touch anywhere
+    const events = ['click', 'touchstart', 'keydown'];
+    events.forEach(event => {
+      document.addEventListener(event, startAudio, { once: true });
+    });
+
+    return () => {
+      events.forEach(event => {
+        document.removeEventListener(event, startAudio);
+      });
+    };
+  }, [audioStarted]);
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      // Start audio if not started yet
+      if (!audioStarted) {
+        audioRef.current.play().catch(err => {
+          console.log("Play prevented:", err);
+        });
+        setAudioStarted(true);
+      }
+      audioRef.current.muted = !audioRef.current.muted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   return (
     <>
@@ -57,13 +103,13 @@ export default function Navbar() {
               href="/"
               onClick={closeMenu}
               data-testid="nav-logo"
-              className="shrink-0 flex items-center gap-2 group"
+              className="shrink-0 flex items-center"
             >
-              <span className="text-primary font-serif text-lg leading-none group-hover:text-secondary transition-colors">★</span>
-              <span className="font-serif text-xl md:text-2xl tracking-[0.18em] text-background uppercase group-hover:text-primary transition-colors">
-                $CHEBU
-              </span>
-              <span className="text-primary font-serif text-lg leading-none group-hover:text-secondary transition-colors">★</span>
+              <img
+                src={logoSvg}
+                alt="$CHEBU Logo"
+                className="h-9 w-auto"
+              />
             </Link>
 
             {/* Desktop nav */}
@@ -80,8 +126,18 @@ export default function Navbar() {
               ))}
             </nav>
 
-            {/* Right side: lang + hamburger */}
+            {/* Right side: mute + lang + hamburger */}
             <div className="flex items-center gap-3 shrink-0">
+              {/* Mute button */}
+              <button
+                onClick={toggleMute}
+                data-testid="btn-mute"
+                aria-label={isMuted ? "Unmute" : "Mute"}
+                className="flex items-center justify-center w-9 h-9 border-[2px] border-primary text-background hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              </button>
+
               <div className="hidden sm:block">
                 <LanguageSwitcher />
               </div>
@@ -137,6 +193,14 @@ export default function Navbar() {
           </nav>
         </div>
       </div>
+
+      {/* Hidden audio player */}
+      <audio
+        ref={audioRef}
+        src={sovietAnthemAudio}
+        loop
+        autoPlay
+      />
     </>
   );
 }

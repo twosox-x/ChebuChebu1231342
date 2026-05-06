@@ -1,6 +1,6 @@
 import { useI18n } from "@/lib/i18n";
-import IllustrationPlaceholder from "./IllustrationPlaceholder";
 import { motion } from "framer-motion";
+import bossImg from "@assets/BOSS.png";
 
 export default function Culture() {
   const { t } = useI18n();
@@ -32,12 +32,13 @@ export default function Culture() {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="absolute inset-0 bg-secondary translate-x-[6px] translate-y-[6px] -z-10 border-[3px] border-foreground"></div>
-            <IllustrationPlaceholder
-              label="CULTURE POSTER"
-              aspectRatio="1/1"
-              className="bg-background border-[4px] border-foreground text-foreground"
-            />
+            <div className="overflow-hidden max-w-lg mx-auto border-[12px] border-white shadow-[12px_12px_0_0_#000000] bg-white">
+              <img 
+                src={bossImg} 
+                alt="Culture Poster" 
+                className="w-full h-auto object-contain"
+              />
+            </div>
           </motion.div>
 
           {/* Content blocks */}

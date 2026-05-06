@@ -1,8 +1,8 @@
 import { useI18n } from "@/lib/i18n";
-import IllustrationPlaceholder from "./IllustrationPlaceholder";
 import { motion } from "framer-motion";
 import { SiTelegram, SiX } from "react-icons/si";
 import { LineChart, ExternalLink } from "lucide-react";
+import stacksImg from "@assets/STACKS.png";
 
 export default function Community() {
   const { t } = useI18n();
@@ -66,12 +66,13 @@ export default function Community() {
             viewport={{ once: true }}
             className="relative"
           >
-            <div className="absolute inset-0 bg-primary translate-x-[6px] translate-y-[6px] -z-10 border-[3px] border-foreground"></div>
-            <IllustrationPlaceholder
-              label="COMMUNITY POSTER"
-              aspectRatio="3/4"
-              className="bg-background border-[4px] border-foreground"
-            />
+            <div className="overflow-hidden max-w-lg mx-auto">
+              <img 
+                src={stacksImg} 
+                alt="Community Poster" 
+                className="w-full h-auto object-contain"
+              />
+            </div>
           </motion.div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useI18n } from "@/lib/i18n";
-import IllustrationPlaceholder from "./IllustrationPlaceholder";
 import { motion } from "framer-motion";
+import propagandaImg from "@assets/PROPAGANDA.png";
 
 export default function Manifesto() {
   const { t } = useI18n();
@@ -50,12 +50,13 @@ export default function Manifesto() {
             viewport={{ once: true }}
             className="lg:col-span-5 relative"
           >
-            <div className="absolute inset-0 bg-primary translate-x-[6px] translate-y-[6px] -z-10 border-[3px] border-foreground"></div>
-            <IllustrationPlaceholder
-              label="PROPAGANDA ILLUSTRATION"
-              aspectRatio="4/5"
-              className="bg-background border-[4px] border-foreground"
-            />
+            <div className="overflow-hidden max-w-2xl mx-auto">
+              <img 
+                src={propagandaImg} 
+                alt="Propaganda Illustration" 
+                className="w-full h-auto object-contain"
+              />
+            </div>
           </motion.div>
         </div>
 

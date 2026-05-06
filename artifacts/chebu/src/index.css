@@ -82,6 +82,16 @@
     @apply font-mono antialiased bg-background text-foreground;
   }
 
+  /* Hide scrollbar for all browsers */
+  * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  *::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Konstruktor', 'Russo One', sans-serif;
     letter-spacing: 0.05em;
@@ -135,4 +145,14 @@ html[data-lang="zh"] h6 {
 
 .marquee-track:hover {
   animation-play-state: paused;
+}
+
+/* ─── Scrollbar hide utility ─── */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
 }

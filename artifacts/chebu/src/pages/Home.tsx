@@ -6,11 +6,14 @@ import Roadmap from "@/components/Roadmap";
 import HowToBuy from "@/components/HowToBuy";
 import PropagandaWall from "@/components/PropagandaWall";
 import Community from "@/components/Community";
+import Stickers from "@/components/Stickers";
 import Footer from "@/components/Footer";
+import SupportModal from "@/components/SupportModal";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
+      <SupportModal />
       <Navbar />
       <main>
         <Hero />
@@ -20,6 +23,7 @@ export default function Home() {
         <HowToBuy />
         <PropagandaWall />
         <Community />
+        <Stickers />
       </main>
       <Footer />
     </div>

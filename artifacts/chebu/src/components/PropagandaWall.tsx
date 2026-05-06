@@ -1,5 +1,11 @@
 import { useI18n } from "@/lib/i18n";
 import { motion } from "framer-motion";
+import gallery1 from "@assets/gallery/1.png";
+import gallery2 from "@assets/gallery/2.png";
+import gallery3 from "@assets/gallery/3.png";
+import gallery4 from "@assets/gallery/4.png";
+import gallery5 from "@assets/gallery/5.png";
+import gallery6 from "@assets/gallery/6.png";
 
 export default function PropagandaWall() {
   const { t } = useI18n();
@@ -11,6 +17,10 @@ export default function PropagandaWall() {
     { text: t.propaganda.card4, bg: "bg-background", fg: "text-foreground", star: "text-primary", size: "text-4xl md:text-5xl" },
     { text: t.propaganda.card5, bg: "bg-secondary", fg: "text-secondary-foreground", star: "text-foreground", size: "text-2xl md:text-3xl" },
     { text: t.propaganda.card6, bg: "bg-primary", fg: "text-primary-foreground", star: "text-secondary", size: "text-2xl md:text-3xl" },
+  ];
+
+  const galleryImages = [
+    gallery1, gallery2, gallery3, gallery4, gallery5, gallery6
   ];
 
   return (
@@ -43,6 +53,24 @@ export default function PropagandaWall() {
             <h3 className={`font-serif ${card.size} uppercase leading-[0.9] tracking-tight drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)] ${card.fg}`}>
               {card.text}
             </h3>
+          </motion.div>
+        ))}
+        {galleryImages.map((img, i) => (
+          <motion.div
+            key={`gallery-${i}`}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: (cards.length + i) * 0.07 }}
+            whileHover={{ scale: 1.02, zIndex: 10 }}
+            className="relative border-r-[3px] border-b-[3px] border-foreground overflow-hidden aspect-square"
+            data-testid={`gallery-card-${i}`}
+          >
+            <img 
+              src={img} 
+              alt={`Gallery ${i + 1}`} 
+              className="w-full h-full object-cover"
+            />
           </motion.div>
         ))}
       </div>

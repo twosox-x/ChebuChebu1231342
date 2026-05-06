@@ -2,6 +2,7 @@ import { useI18n } from "@/lib/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Copy, Check } from "lucide-react";
 import { useState } from "react";
+import logoSvg from "@assets/LOGO.svg";
 
 export default function Footer() {
   const { t } = useI18n();
@@ -19,10 +20,12 @@ export default function Footer() {
 
       {/* Top banner */}
       <div className="bg-primary border-b-[4px] border-foreground py-6 px-4">
-        <div className="container mx-auto flex items-center justify-center gap-6">
-          <span className="text-secondary text-4xl font-serif leading-none select-none">★</span>
-          <span className="font-serif text-4xl md:text-6xl text-primary-foreground tracking-[0.2em] uppercase drop-shadow-[3px_3px_0_#17110D]">$CHEBU</span>
-          <span className="text-secondary text-4xl font-serif leading-none select-none">★</span>
+        <div className="container mx-auto flex items-center justify-center">
+          <img
+            src={logoSvg}
+            alt="$CHEBU Logo"
+            className="h-14 md:h-20 w-auto drop-shadow-[3px_3px_0_#17110D]"
+          />
         </div>
       </div>
 
