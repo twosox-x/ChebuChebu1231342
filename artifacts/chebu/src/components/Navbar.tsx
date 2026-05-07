@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useI18n } from "@/lib/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Menu, X, Volume2, VolumeX } from "lucide-react";
 import sovietAnthemAudio from "@assets/National Anthem of USSR.mp3";
 import logoSvg from "@assets/LOGO.svg";
@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "#roadmap",   labelKey: "roadmap"   },
   { href: "#how-to-buy",labelKey: "howToBuy"  },
   { href: "#community", labelKey: "community" },
+  { href: "/music",     labelKey: "music", isRoute: true },
 ] as const;
 
 const NAV_LABELS: Record<(typeof NAV_LINKS)[number]["labelKey"], Record<"en"|"ru"|"zh", string>> = {
@@ -20,13 +21,19 @@ const NAV_LABELS: Record<(typeof NAV_LINKS)[number]["labelKey"], Record<"en"|"ru
   roadmap:   { en: "Roadmap",   ru: "Пятилетний план", zh: "计划" },
   howToBuy:  { en: "How to Buy",ru: "Как купить", zh: "购买" },
   community: { en: "Community", ru: "Сообщество", zh: "社区" },
+  music:     { en: "Music",     ru: "Музыка", zh: "音乐" },
 };
 
 export default function Navbar() {
   const { language } = useI18n();
+  const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(() => {
+    // Initialize from localStorage
+    const saved = localStorage.getItem('chebu-anthem-muted');
+    return saved === 'true';
+  });
   const [audioStarted, setAudioStarted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -45,15 +52,16 @@ export default function Navbar() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  // Auto-play audio on first user interaction
+  // Auto-play on mount (browsers may block this) - but NOT on Music page or when muted
   useEffect(() => {
+    if (audioStarted || location === '/music' || isMuted) return;
+
     const startAudio = () => {
-      if (audioRef.current && !audioStarted) {
-        audioRef.current.play().catch(err => {
-          console.log("Auto-play prevented:", err);
-        });
-        setAudioStarted(true);
-      }
+      if (!audioRef.current || audioStarted || location === '/music' || isMuted) return;
+      audioRef.current.play().catch(err => {
+        console.log("Auto-play prevented:", err);
+      });
+      setAudioStarted(true);
     };
 
     // Try to play immediately
@@ -70,19 +78,33 @@ export default function Navbar() {
         document.removeEventListener(event, startAudio);
       });
     };
-  }, [audioStarted]);
+  }, [audioStarted, location, isMuted]);
+
+  // Set audio muted state when audio element is ready
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
 
   const toggleMute = () => {
     if (audioRef.current) {
-      // Start audio if not started yet
-      if (!audioStarted) {
+      const newMutedState = !isMuted;
+      
+      // Start audio if not started yet and unmuting
+      if (!audioStarted && !newMutedState) {
         audioRef.current.play().catch(err => {
           console.log("Play prevented:", err);
         });
         setAudioStarted(true);
       }
-      audioRef.current.muted = !audioRef.current.muted;
-      setIsMuted(!isMuted);
+      
+      // Update muted state
+      audioRef.current.muted = newMutedState;
+      setIsMuted(newMutedState);
+      
+      // Persist to localStorage
+      localStorage.setItem('chebu-anthem-muted', String(newMutedState));
     }
   };
 
@@ -114,16 +136,31 @@ export default function Navbar() {
 
             {/* Desktop nav */}
             <nav className="hidden md:flex items-center gap-0 flex-1 justify-center" aria-label="Main navigation">
-              {NAV_LINKS.map(({ href, labelKey }) => (
-                <a
-                  key={href}
-                  href={href}
-                  className="relative px-4 py-1 font-mono text-[11px] tracking-[0.25em] uppercase text-background/60 hover:text-primary transition-colors group"
-                >
-                  {NAV_LABELS[labelKey][language]}
-                  <span className="absolute bottom-0 left-4 right-4 h-[2px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
-                </a>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const { href, labelKey } = link;
+                const isRoute = 'isRoute' in link && link.isRoute;
+                const className = "relative px-4 py-1 font-mono text-[11px] tracking-[0.25em] uppercase text-background/60 hover:text-primary transition-colors group";
+                
+                return isRoute ? (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={className}
+                  >
+                    {NAV_LABELS[labelKey][language]}
+                    <span className="absolute bottom-0 left-4 right-4 h-[2px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                  </Link>
+                ) : (
+                  <a
+                    key={href}
+                    href={href}
+                    className={className}
+                  >
+                    {NAV_LABELS[labelKey][language]}
+                    <span className="absolute bottom-0 left-4 right-4 h-[2px] bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                  </a>
+                );
+              })}
             </nav>
 
             {/* Right side: mute + lang + hamburger */}
@@ -176,17 +213,33 @@ export default function Navbar() {
           className={`absolute top-14 left-0 right-0 bg-foreground border-b-[4px] border-primary transition-transform duration-200 ${menuOpen ? "translate-y-0" : "-translate-y-full"}`}
         >
           <nav className="flex flex-col" aria-label="Mobile navigation">
-            {NAV_LINKS.map(({ href, labelKey }, i) => (
-              <a
-                key={href}
-                href={href}
-                onClick={closeMenu}
-                className={`flex items-center gap-4 px-6 py-5 font-serif text-lg uppercase tracking-widest text-background hover:bg-primary hover:text-primary-foreground transition-colors ${i < NAV_LINKS.length - 1 ? "border-b-[2px] border-primary/30" : ""}`}
-              >
-                <span className="text-primary text-sm">★</span>
-                {NAV_LABELS[labelKey][language]}
-              </a>
-            ))}
+            {NAV_LINKS.map((link, i) => {
+              const { href, labelKey } = link;
+              const isRoute = 'isRoute' in link && link.isRoute;
+              const className = `flex items-center gap-4 px-6 py-5 font-serif text-lg uppercase tracking-widest text-background hover:bg-primary hover:text-primary-foreground transition-colors ${i < NAV_LINKS.length - 1 ? "border-b-[2px] border-primary/30" : ""}`;
+              
+              return isRoute ? (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={closeMenu}
+                  className={className}
+                >
+                  <span className="text-primary text-sm">★</span>
+                  {NAV_LABELS[labelKey][language]}
+                </Link>
+              ) : (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={closeMenu}
+                  className={className}
+                >
+                  <span className="text-primary text-sm">★</span>
+                  {NAV_LABELS[labelKey][language]}
+                </a>
+              );
+            })}
             <div className="px-6 py-5 border-t-[2px] border-primary/30">
               <LanguageSwitcher />
             </div>

@@ -73,6 +73,13 @@ const translations = {
       description2: "Join our Telegram channel to download the complete sticker pack and start using them in your chats.",
       joinTelegram: "Join Telegram",
     },
+    music: {
+      title: "Music",
+      subtitle: "The People's Soundtrack",
+      trackTitle: "Cheburashka Theme",
+      artist: "Soviet Collective",
+      videoLabel: "Official Music Video",
+    },
     supportModal: {
       headline: "Comrade, route your $SOL straight into the revolution!",
       body: "Use our swap to directly purchase CHEBU on $TON, and inject the money directly into the LP!",
@@ -153,6 +160,13 @@ const translations = {
       description2: "Присоединяйтесь к нашему Telegram каналу, чтобы скачать полный набор стикеров и начать использовать их в чатах.",
       joinTelegram: "Присоединиться к Telegram",
     },
+    music: {
+      title: "Музыка",
+      subtitle: "Народный саундтрек",
+      trackTitle: "Тема Чебурашки",
+      artist: "Советский коллектив",
+      videoLabel: "Официальный клип",
+    },
     supportModal: {
       headline: "Товарищ, направь свой $SOL прямо в революцию!",
       body: "Используй наш своп, чтобы напрямую купить CHEBU на $TON и сразу пополнить ликвидность!",
@@ -232,6 +246,13 @@ const translations = {
       getPack: "获取贴纸包",
       description2: "加入我们的 Telegram 频道，下载完整的贴纸包并开始在聊天中使用它们。",
       joinTelegram: "加入 Telegram",
+    },
+    music: {
+      title: "音乐",
+      subtitle: "人民的配乐",
+      trackTitle: "切布拉什卡主题曲",
+      artist: "苏联集体",
+      videoLabel: "官方音乐视频",
     },
     supportModal: {
       headline: "同志，把你的 $SOL 直接注入革命！",

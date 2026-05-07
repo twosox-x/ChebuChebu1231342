@@ -1,249 +1,180 @@
 import { useState, useEffect } from "react";
-import { Copy, Check, AlertCircle, Zap, Loader } from "lucide-react";
+import { ArrowDownUp, Clock, Shield, ChevronDown } from "lucide-react";
 
 interface BuyTerminalProps {
   onStatusChange?: (status: string) => void;
 }
 
 export default function BuyTerminal({ onStatusChange }: BuyTerminalProps) {
-  const [solAmount, setSolAmount] = useState("1.0");
-  const [paymentToken, setPaymentToken] = useState<"sol" | "usdc">("sol");
-  const [tonWallet, setTonWallet] = useState("");
-  const [connectedWallet, setConnectedWallet] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [quoteTime, setQuoteTime] = useState(120);
-  const [tonWalletValid, setTonWalletValid] = useState<boolean | null>(null);
+  const [sendAmount, setSendAmount] = useState("1");
+  const [receiveAmount, setReceiveAmount] = useState("27753.9987");
+  const [tonAddress, setTonAddress] = useState("");
+  const [slippage, setSlippage] = useState("2.00");
+  const [estimatedTime] = useState("~90s");
 
-  // Dummy quote calculation
-  const estimatedTokens = parseFloat(solAmount || "0") * 10000;
-
-  // Quote timer countdown
-  useEffect(() => {
-    if (quoteTime <= 0) return;
-    const timer = setInterval(() => setQuoteTime(t => t - 1), 1000);
-    return () => clearInterval(timer);
-  }, [quoteTime]);
-
-  // Validate TON wallet (dummy validation)
-  useEffect(() => {
-    if (!tonWallet) {
-      setTonWalletValid(null);
-      return;
+  const handlePaste = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      setTonAddress(text);
+    } catch (err) {
+      console.log("Failed to paste:", err);
     }
-    // Dummy validation: TON addresses start with 0Q or UQ and are ~48 chars
-    const isValid = (tonWallet.startsWith("0Q") || tonWallet.startsWith("UQ")) && tonWallet.length >= 45;
-    setTonWalletValid(isValid);
-  }, [tonWallet]);
-
-  const handleConnectWallet = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setConnectedWallet("Phantom...8x9K");
-      setIsLoading(false);
-      onStatusChange?.("wallet_connected");
-    }, 800);
   };
 
-  const handleDisconnect = () => {
-    setConnectedWallet(null);
-    onStatusChange?.("wallet_disconnected");
-  };
-
-  const handleBuy = () => {
-    if (!connectedWallet || !tonWallet || !tonWalletValid) return;
-    setIsLoading(true);
+  const handleCreateSwap = () => {
     onStatusChange?.("payment_pending");
-    setTimeout(() => {
-      setIsLoading(false);
-      onStatusChange?.("payment_confirmed");
-    }, 2000);
   };
 
-  const handleCopyWallet = () => {
-    navigator.clipboard.writeText(connectedWallet || "");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  // Calculate receive amount based on send amount
+  useEffect(() => {
+    const amount = parseFloat(sendAmount) || 0;
+    const rate = 27753.9987;
+    setReceiveAmount((amount * rate).toFixed(4));
+  }, [sendAmount]);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  };
+  const estimatedReceived = parseFloat(receiveAmount) || 0;
+  const minReceived = estimatedReceived * (1 - parseFloat(slippage) / 100);
+  const bridgeFee = 0.005;
+  const platformFee = parseFloat(sendAmount) * 0.01;
+  const priceImpact = 0.12;
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className="bg-background border-[4px] border-foreground shadow-[8px_8px_0_0_#150C07] overflow-hidden">
+    <div className="w-full">
+      <div className="bg-card border-[4px] border-primary shadow-[8px_8px_0_0_#17110D] overflow-hidden">
         {/* Header */}
-        <div className="bg-primary border-b-[3px] border-foreground px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h2 className="font-serif text-2xl uppercase text-primary-foreground tracking-widest">
-              Buy Terminal
-            </h2>
-            <div className="flex items-center gap-2 bg-primary-foreground/20 px-3 py-1 rounded border border-primary-foreground/40">
-              <Zap className="w-3 h-3 text-primary-foreground" />
-              <span className="font-mono text-xs text-primary-foreground">LIVE</span>
-            </div>
-          </div>
+        <div className="bg-primary border-b-[4px] border-foreground px-6 py-4">
+          <h2 className="font-serif text-2xl uppercase text-primary-foreground tracking-widest">
+            New Swap
+          </h2>
         </div>
 
         {/* Content */}
         <div className="p-6 space-y-6">
-          {/* Wallet Connection */}
+          {/* You Send */}
           <div className="space-y-3">
-            <label className="block font-serif text-sm uppercase tracking-widest text-foreground">
-              Phantom Wallet
-            </label>
-            {!connectedWallet ? (
-              <button
-                onClick={handleConnectWallet}
-                disabled={isLoading}
-                className="w-full py-3 bg-primary text-primary-foreground border-[3px] border-foreground font-serif uppercase tracking-widest text-sm hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader className="w-4 h-4 animate-spin" />
-                    Connecting...
-                  </>
-                ) : (
-                  "Connect Phantom"
-                )}
-              </button>
-            ) : (
-              <div className="flex items-center gap-2 bg-foreground/5 border-[2px] border-primary p-3">
-                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                <code className="font-mono text-sm flex-1">{connectedWallet}</code>
-                <button
-                  onClick={handleCopyWallet}
-                  className="p-2 hover:bg-foreground/10 transition-colors"
-                >
-                  {copied ? (
-                    <Check className="w-4 h-4 text-primary" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-foreground/60" />
-                  )}
-                </button>
-                <button
-                  onClick={handleDisconnect}
-                  className="px-3 py-1 text-xs font-mono uppercase border border-foreground/30 hover:bg-foreground/5 transition-colors"
-                >
-                  Disconnect
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Payment Token Selection */}
-          <div className="space-y-3">
-            <label className="block font-serif text-sm uppercase tracking-widest text-foreground">
-              Pay With
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              {(["sol", "usdc"] as const).map((token) => (
-                <button
-                  key={token}
-                  onClick={() => setPaymentToken(token)}
-                  className={`py-2 border-[2px] font-serif uppercase tracking-widest text-sm transition-all ${
-                    paymentToken === token
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-foreground/30 text-foreground/60 hover:border-foreground"
-                  }`}
-                >
-                  ${token.toUpperCase()}
-                </button>
-              ))}
+            <div className="flex justify-between items-center">
+              <label className="font-mono text-xs uppercase tracking-wider text-foreground/60">
+                You Send
+              </label>
+              <span className="font-mono text-xs text-foreground/60">≈ US$88.49</span>
             </div>
-          </div>
-
-          {/* Amount Input */}
-          <div className="space-y-3">
-            <label className="block font-serif text-sm uppercase tracking-widest text-foreground">
-              Amount ({paymentToken.toUpperCase()})
-            </label>
-            <div className="relative">
+            <div className="bg-background border-[3px] border-foreground p-4 flex items-center gap-3">
+              <button className="flex items-center gap-2 px-3 py-2 bg-card border-[2px] border-primary hover:bg-primary/10 transition-colors">
+                <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full" />
+                <span className="font-serif uppercase text-sm">SOL</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
               <input
                 type="number"
-                value={solAmount}
-                onChange={(e) => setSolAmount(e.target.value)}
-                disabled={!connectedWallet}
-                placeholder="0.00"
-                className="w-full px-4 py-3 bg-foreground/5 border-[2px] border-foreground font-mono text-lg disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-primary"
+                value={sendAmount}
+                onChange={(e) => setSendAmount(e.target.value)}
+                className="flex-1 bg-transparent font-mono text-3xl text-right focus:outline-none"
+                placeholder="0"
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-sm text-foreground/60">
-                {paymentToken.toUpperCase()}
-              </span>
             </div>
           </div>
 
-          {/* Quote Info */}
-          <div className="bg-foreground/5 border-[2px] border-foreground/30 p-4 space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="font-mono text-xs text-foreground/70">Estimated Output</span>
-              <span className="font-serif text-lg font-bold text-primary">
-                {estimatedTokens.toLocaleString()} CHEBU
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="font-mono text-xs text-foreground/70">Quote Expires</span>
-              <span className={`font-mono text-sm font-bold ${quoteTime < 30 ? "text-red-500" : "text-primary"}`}>
-                {formatTime(quoteTime)}
-              </span>
-            </div>
+          {/* Swap Direction Button */}
+          <div className="flex justify-center -my-3 relative z-10">
+            <button className="p-2 bg-card border-[3px] border-primary hover:bg-primary/10 transition-colors">
+              <ArrowDownUp className="w-5 h-5 text-primary" />
+            </button>
           </div>
 
-          {/* TON Wallet Address */}
+          {/* You Receive */}
           <div className="space-y-3">
-            <label className="block font-serif text-sm uppercase tracking-widest text-foreground">
-              TON Wallet Address
-            </label>
-            <div className="relative">
+            <div className="flex justify-between items-center">
+              <label className="font-mono text-xs uppercase tracking-wider text-foreground/60">
+                You Receive
+              </label>
+              <span className="font-mono text-xs text-foreground/60">min {minReceived.toFixed(2)}</span>
+            </div>
+            <div className="bg-background border-[3px] border-foreground p-4 flex items-center gap-3">
+              <button className="flex items-center gap-2 px-3 py-2 bg-card border-[2px] border-primary hover:bg-primary/10 transition-colors">
+                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xs font-bold">C</div>
+                <span className="font-serif uppercase text-sm">CHEBU</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
               <input
                 type="text"
-                value={tonWallet}
-                onChange={(e) => setTonWallet(e.target.value)}
-                disabled={!connectedWallet}
-                placeholder="0Q... or UQ..."
-                className={`w-full px-4 py-3 bg-foreground/5 border-[2px] font-mono text-sm disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none transition-colors ${
-                  tonWalletValid === null
-                    ? "border-foreground"
-                    : tonWalletValid
-                      ? "border-primary"
-                      : "border-red-500"
-                }`}
+                value={receiveAmount}
+                readOnly
+                className="flex-1 bg-transparent font-mono text-3xl text-right focus:outline-none"
               />
-              {tonWalletValid !== null && (
-                <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                  {tonWalletValid ? (
-                    <Check className="w-5 h-5 text-primary" />
-                  ) : (
-                    <AlertCircle className="w-5 h-5 text-red-500" />
-                  )}
-                </div>
-              )}
             </div>
-            {tonWalletValid === false && (
-              <p className="text-xs text-red-500 font-mono">Invalid TON address format</p>
-            )}
           </div>
 
-          {/* Main CTA */}
+          {/* TON Destination Address */}
+          <div className="space-y-3">
+            <label className="font-mono text-xs uppercase tracking-wider text-foreground/60">
+              Your TON Destination Address
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={tonAddress}
+                onChange={(e) => setTonAddress(e.target.value)}
+                placeholder="UQ... or EQ..."
+                className="flex-1 px-4 py-3 bg-background border-[3px] border-foreground font-mono text-sm focus:outline-none focus:border-primary"
+              />
+              <button
+                onClick={handlePaste}
+                className="px-6 py-3 bg-card border-[3px] border-primary font-mono text-sm uppercase hover:bg-primary/10 transition-colors"
+              >
+                Paste
+              </button>
+            </div>
+          </div>
+
+          {/* Slippage Tolerance */}
+          <div className="bg-background border-[3px] border-foreground/30 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4 text-foreground/60" />
+                <span className="font-mono text-xs uppercase">Slippage tolerance</span>
+              </div>
+              <span className="font-mono text-sm font-bold text-primary">{slippage}%</span>
+            </div>
+          </div>
+
+          {/* Swap Details */}
+          <div className="space-y-2 font-mono text-sm">
+            <div className="flex justify-between">
+              <span className="text-foreground/60">Estimated received</span>
+              <span className="font-bold">{estimatedReceived.toFixed(4)} CHEBU</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-foreground/60">Minimum received</span>
+              <span className="font-bold">{minReceived.toFixed(2)} CHEBU</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-foreground/60">Bridge fee</span>
+              <span className="font-bold">{bridgeFee} SOL</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-foreground/60">Platform fee (1%)</span>
+              <span className="font-bold">{platformFee.toFixed(2)} SOL</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-foreground/60" />
+                <span className="text-foreground/60">Estimated time</span>
+              </div>
+              <span className="font-bold text-primary">{estimatedTime}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-foreground/60">Price impact</span>
+              <span className="font-bold text-green-500">{priceImpact}%</span>
+            </div>
+          </div>
+
+          {/* Create Swap Button */}
           <button
-            onClick={handleBuy}
-            disabled={!connectedWallet || !tonWalletValid || isLoading}
-            className="w-full py-4 bg-primary text-primary-foreground border-[3px] border-foreground font-serif uppercase tracking-widest text-base shadow-[4px_4px_0_#150C07] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            onClick={handleCreateSwap}
+            disabled={!tonAddress || parseFloat(sendAmount) <= 0}
+            className="w-full py-4 bg-primary text-primary-foreground border-[4px] border-foreground font-serif uppercase tracking-widest text-lg shadow-[6px_6px_0_#17110D] hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? (
-              <>
-                <Loader className="w-5 h-5 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                <Zap className="w-5 h-5" />
-                Buy with Phantom
-              </>
-            )}
+            Create Swap
           </button>
         </div>
       </div>

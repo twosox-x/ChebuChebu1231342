@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Support from "@/pages/Support";
 import SOLtoTON from "@/pages/SOLtoTON";
+import Music from "@/pages/Music";
 import { I18nProvider } from "@/lib/i18n";
 import FilmGrain from "@/components/FilmGrain";
 
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/support" component={Support} />
       <Route path="/SOLtoTON" component={SOLtoTON} />
+      <Route path="/music" component={Music} />
       <Route component={NotFound} />
     </Switch>
   );
